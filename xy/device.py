@@ -82,18 +82,20 @@ class Device(object):
     self.__x = x
     self.__y = y
     self.__write(
-      'G0', 
+      'G1', 
       'X%s' % x,
-      'Y%s' % y
+      'Y%s' % y,
+      'F800'
     )
 
   def rel_move(self, x, y):
     self.__x += x
     self.__y += y
     self.__write(
-      'G0', 
+      'G1', 
       'X%s' % self.__x,
-      'Y%s' % self.__y
+      'Y%s' % self.__y,
+      'F800'
     )
 
   def draw(self, points, up, down):

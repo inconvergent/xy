@@ -18,8 +18,8 @@ def main():
 
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
-    raw_input('start ...')
-    device.move(150,0)
+    # raw_input('start ...')
+    device.move(100,0)
 
     raw_input('done ...')
 
