@@ -9,7 +9,6 @@ from time import sleep
 class Device(object):
 
   def __init__(self, port, penup, pendown):
-    print('init ...')
     self.serial = None
 
     self.__penup = penup
@@ -30,53 +29,66 @@ class Device(object):
       # dsrdtr = False
     )
 
-    sleep(2)
-    self.pen(self.__penup)
-    print('started')
+    sleep(0.5)
+    self.write('START')
+
+    self.set_absolute()
+    self.penup()
 
   def __enter__(self):
-    # self.__init__(port)
     return self
 
   def __exit__(self,*arg, **args):
-    print('closing ...')
     if self.serial:
       try:
+        self.write('STOP')
         self.serial.close()
       except Exception as e:
         print(e)
         raise
-    print('closed') 
+
+  # def __read(self):
+
+    # data = []
+    # res = ''
+
+    # w = self.serial.inWaiting()
+    # c = self.serial.read(w)
+
+    # return c.strip()
 
   def __read(self):
+
     data = []
-    # print('read')
     while True:
-      # print('read ...')
+      # print('w',self.serial.inWaiting(), data)
       c = self.serial.read(1)
-      # print(c)
       if c == '\n':
-        return ''.join(data)
+        break
       data.append(c)
-      # print('data', data)
+
+    return ''.join(data)
+
+  def write(self, *args):
+    self.__write(*args)
 
   def __write(self, *args):
-    print('write')
+    ow = self.serial.outWaiting()
+    iw = self.serial.outWaiting()
+    print('ow {:d} iw {:d}'.format(ow,iw))
     self.serial.xonxoff = True
     line = ' '.join(map(str, args))
-    print(line)
+    print(' < ' + line)
     self.serial.write('%s\r\n' % line)
-    print(self.__read())
-    # self.serial.xonxoff = False
-    # print('done')
+    print(' > ' + self.__read())
 
   def home(self):
     self.__write('G28')
 
-  # def set_relative(self):
-    # self.__write('G91')
-  # def set_absolute(self):
-    # self.__write('G90')
+  def set_relative(self):
+    self.__write('G91')
+  def set_absolute(self):
+    self.__write('G90')
 
   def move(self, x, y):
     self.__x = x
@@ -85,18 +97,17 @@ class Device(object):
       'G1', 
       'X%s' % x,
       'Y%s' % y,
-      'F800'
     )
 
-  def rel_move(self, x, y):
-    self.__x += x
-    self.__y += y
-    self.__write(
-      'G1', 
-      'X%s' % self.__x,
-      'Y%s' % self.__y,
-      'F800'
-    )
+  # def rel_move(self, x, y):
+    # self.__x += x
+    # self.__y += y
+    # self.__write(
+      # 'G1', 
+      # 'X%s' % self.__x,
+      # 'Y%s' % self.__y,
+      # # 'F800'
+    # )
 
   def draw(self, points, up, down):
     if not points:
@@ -110,6 +121,7 @@ class Device(object):
 
   def pen(self, position):
     self.__write('M1', position)
+    return
 
   def penup(self):
     self.pen(self.__penup)
