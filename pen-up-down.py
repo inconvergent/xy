@@ -17,15 +17,21 @@ TTY = '/dev/ttyUSB0'
 
 def main():
 
+  from collections import Counter as counter
+
+
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
-    raw_input('enter to start ...')
-   
-    # device.home()
-    device.move(XMAX,YMAX)
-    device.move(0,0)
+    for i in xrange(100000):
+      if i % 2 == 0:
+        print('down')
+        device.pendown()
+      else:
+        print('up')
+        device.penup()
 
-    device.penup()
+      raw_input('flip ...')
+
 
     raw_input('\n\ndone ...')
 
