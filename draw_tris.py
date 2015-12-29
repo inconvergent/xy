@@ -18,15 +18,12 @@ TTY = '/dev/ttyUSB0'
 def main(args):
 
   from numpy import array
-  from modules.utils import get_paths_from_n_files as get
+  from modules.utils import get_tris_from_file as get
 
-  prefix = args.prefix
+  fn = args.fn
   scale = args.scale
-  steps = args.steps
-  stride = args.stride
-  skip = args.skip
 
-  paths = get(prefix, XMAX, YMAX, skip, steps, stride, scale)
+  paths = get(fn, XMAX, YMAX, scale)
   
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
@@ -39,24 +36,9 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '--prefix',
+    '--fn',
     type=str,
     required=True
-  )
-  parser.add_argument(
-    '--steps',
-    type=int,
-    default=100000
-  )
-  parser.add_argument(
-    '--stride',
-    type=int,
-    default=1
-  )
-  parser.add_argument(
-    '--skip',
-    type=int,
-    default=0
   )
   parser.add_argument(
     '--scale',

@@ -1,16 +1,5 @@
 
-Most of the logic is written by @fogelman, and 
-is reproduced here with permission. 
+xy/device is an adapted version of code written by @fogelman
 
-.
-├── install
-├── modules
-│   ├── device.py    # @fogelman
-│   └── gcode.py     # @fogelman
-├── requirements.txt
-├── sample
-│   ├── field.py     # @fogelman
-│   ├── main.py      # @fogelman
-│   └── usa.py       # @fogelman
-└── setup.py
+It is reproduced here with permission. 
 
