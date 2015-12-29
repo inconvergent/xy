@@ -18,8 +18,8 @@ class Device(object):
     self.__y = 0.
 
     self.serial = serial.Serial(
-      dev, 
-      115200, 
+      dev,
+      115200,
       parity = serial.PARITY_NONE,
       bytesize = serial.EIGHTBITS,
       stopbits = serial.STOPBITS_ONE,
@@ -97,7 +97,7 @@ class Device(object):
     self.__x = x
     self.__y = y
     self.__write(
-      'G1', 
+      'G1',
       'X%s' % x,
       'Y%s' % y
     )
@@ -106,7 +106,7 @@ class Device(object):
     self.__x += x
     self.__y += y
     self.__write(
-      'G1', 
+      'G1',
       'X%s' % self.__x,
       'Y%s' % self.__y
     )

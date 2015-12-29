@@ -9,8 +9,9 @@ from time import sleep
 
 PENUP = 140
 PENDOWN = 160
-XMAX = 150
-YMAX = 150
+# XMAX = 150
+# YMAX = 150
+SMAX = 150
 TTY = '/dev/ttyUSB0'
 
 
@@ -23,8 +24,8 @@ def main(args):
   fn = args.fn
   scale = args.scale
 
-  paths = get(fn, XMAX, YMAX, scale)
-  
+  paths = get(fn, SMAX)
+
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
     device.do_paths(paths)
