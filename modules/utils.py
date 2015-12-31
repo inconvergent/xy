@@ -18,35 +18,43 @@ def print_values(mi, ma, xd, yd):
   print('x: min {:0.08f} max {:0.08f} d {:0.08f}'.format(mi[0], ma[0], xd))
   print('y: min {:0.08f} max {:0.08f} d {:0.08f}'.format(mi[1], ma[1], yd))
 
-def scale(xy):
+def do_scale(xy):
 
   _,_,xd,yd = get_bounding_box(xy)
   xy/=max(xd,yd)
 
 def get_paths_from_n_files(
-    prefix,
-    xmax,
-    ymax,
+    pattern,
+    smax,
     skip=0,
-    steps=500,
+    steps=1,
     stride=1,
     scale=1,
-    postfix='*.2obj'
+    scale_to_fit=False
   ):
 
   from dddUtils.ioOBJ import load_2d as load
   from dddUtils.ddd import order_edges
+  from dddUtils.ddd import get_mid_2d as get_mid
 
   p = []
 
-  for fn in sorted(glob(prefix + postfix))[skip:steps:stride]:
+  for fn in sorted(glob(pattern))[skip:steps:stride]:
 
     print(fn)
     data = load(fn)
     vertices = data['vertices']
-    vertices *= scale
-    vertices[:,0] *= xmax
-    vertices[:,1] *= ymax
+
+    if scale_to_fit:
+      vertices -= get_mid(vertices)
+      do_scale(vertices)
+      vertices += array([[0.5]*2])
+      vertices[:,:] *= smax
+      print('scaled size:')
+      print_values(*get_bounding_box(vertices))
+    else:
+      vertices[:,:] *= smax*scale
+
     edges = data['edges']
     _,v_ordered = order_edges(edges)
     p.append(vertices[v_ordered,:])
@@ -68,7 +76,7 @@ def get_paths_from_file(
   lines = data['lines']
 
   vertices -= get_mid(vertices)
-  scale(vertices)
+  do_scale(vertices)
   vertices += array([[0.5]*2])
   vertices[:,:] *= smax
 
@@ -98,7 +106,7 @@ def get_tris_from_file(
   vertices = data['vertices']
 
   vertices -= get_mid(vertices)
-  scale(vertices)
+  do_scale(vertices)
   vertices += array([[0.5]*2])
   vertices[:,:] *= smax
 

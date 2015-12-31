@@ -9,8 +9,7 @@ from time import sleep
 
 PENUP = 140
 PENDOWN = 160
-XMAX = 150
-YMAX = 150
+SMAX = 150
 TTY = '/dev/ttyUSB0'
 
 
@@ -20,14 +19,17 @@ def main(args):
   from numpy import array
   from modules.utils import get_paths_from_n_files as get
 
-  prefix = args.prefix
+  pattern = args.pattern
   scale = args.scale
+  scale_to_fit = args.scaleToFit
   steps = args.steps
   stride = args.stride
   skip = args.skip
 
-  paths = get(prefix, XMAX, YMAX, skip, steps, stride, scale)
-  
+  print(args)
+
+  paths = get(pattern, SMAX, skip, steps, stride, scale, scale_to_fit)
+
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
     device.do_paths(paths)
@@ -39,7 +41,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '--prefix',
+    '--pattern',
     type=str,
     required=True
   )
@@ -63,6 +65,18 @@ if __name__ == '__main__':
     type=float,
     default=1.0
   )
+
+  parser.add_argument(
+    '--scaleToFit',
+    dest='scaleToFit',
+    action='store_true'
+  )
+  parser.add_argument(
+    '--no-scaleToFit',
+    dest='scaleToFit',
+    action='store_false'
+  )
+  parser.set_defaults(scaleToFit=False)
 
   args = parser.parse_args()
   main(args)

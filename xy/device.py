@@ -72,14 +72,14 @@ class Device(object):
   def __write(self, *args):
 
     ow = self.serial.outWaiting()
-    iw = self.serial.outWaiting()
+    iw = self.serial.inWaiting()
     self.serial.xonxoff = True
 
     line = ' '.join(map(str, args))
     print(' o {:d} i {:d} < {:s}'.format(ow, iw, line))
 
     ow = self.serial.outWaiting()
-    iw = self.serial.outWaiting()
+    iw = self.serial.inWaiting()
     self.serial.write('%s\r\n' % line)
 
     print(' o {:d} i {:d} > {:s}'.format(ow, iw, self.__read()))
@@ -133,6 +133,10 @@ class Device(object):
 
   def do_paths(self, paths):
 
+    from time import time
+
+    t0 = time()
+
     num = len(paths)
 
     print('total paths: {:d}'.format(num))
@@ -140,7 +144,7 @@ class Device(object):
 
     for i, p in enumerate(paths):
 
-      print('progress: {:d} / {:d}'.format(i, num))
+      print('progress: {:d}/{:d} time: {:0.05f}'.format(i, num, time()-t0))
 
       self.move(*p[0,:])
       self.pendown()
@@ -148,7 +152,7 @@ class Device(object):
         self.move(*xy)
       self.penup()
 
-    device.penup()
+    self.penup()
 
     raw_input('enter to finish ... ')
 
