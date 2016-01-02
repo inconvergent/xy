@@ -5,9 +5,7 @@ try:
 except Exception:
   from distutils.core import setup, find_packages
 
-packages = find_packages()
-
-print(packages)
+packages = ['xy']
 
 setup(
     name = 'xy',
@@ -17,9 +15,8 @@ setup(
       'pyserial==2.7',
       'pyshp==1.2.3',
       'Shapely==1.5.13'
-
     ],
-    license = '', 
+    license = '',
     packages = packages
 )
 

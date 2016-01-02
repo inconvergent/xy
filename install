@@ -1,4 +1,10 @@
 #!/bin/bash
 
+
+rm -rf *.pyc
+rm -rf build
+rm -rf dist
+rm -rf render.egg-info
 python setup.py build_ext --inplace
+python setup.py install --user
 
