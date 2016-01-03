@@ -10,7 +10,7 @@ packages = ['xy']
 setup(
     name = 'xy',
     version = '0.0.1',
-    author = '@fogelman, @inconvergent, ',
+    author = '@fogleman, @inconvergent, ',
     install_requires = [
       'pyserial==2.7',
       'pyshp==1.2.3',
