@@ -2,13 +2,18 @@
 
 from __future__ import print_function
 
-import serial
+from serial import Serial
 from time import sleep
 
 
 class Device(object):
 
   def __init__(self, dev, penup, pendown):
+
+    from serial import PARITY_NONE
+    from serial import EIGHTBITS, STOPBITS_ONE
+    from serial import STOPBITS_ONE
+
     self.serial = None
 
     self.__penup = penup
@@ -17,12 +22,12 @@ class Device(object):
     self.__x = 0.
     self.__y = 0.
 
-    self.serial = serial.Serial(
+    self.serial = Serial(
       dev,
       115200,
-      parity = serial.PARITY_NONE,
-      bytesize = serial.EIGHTBITS,
-      stopbits = serial.STOPBITS_ONE,
+      parity = PARITY_NONE,
+      bytesize = EIGHTBITS,
+      stopbits = STOPBITS_ONE,
       # timeout = 0.1,
       # xonxoff = True,
       # rtscts = False,
