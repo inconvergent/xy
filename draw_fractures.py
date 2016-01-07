@@ -23,6 +23,10 @@ def main(args):
 
   paths = get(fn, SMAX)
 
+  # from dddUtils.svg import export_svg
+  # export_svg('fractures1.svg', paths, 1)
+
+
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
     device.do_paths(paths)
