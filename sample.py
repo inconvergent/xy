@@ -19,8 +19,9 @@ def main():
 
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
+    device.penup()
     raw_input('enter to start ...')
-   
+
     # device.home()
     device.move(XMAX,YMAX)
     device.move(0,0)

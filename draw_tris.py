@@ -4,13 +4,10 @@
 from __future__ import print_function
 
 from xy.device import Device
-from time import sleep
 
 
 PENUP = 140
 PENDOWN = 160
-# XMAX = 150
-# YMAX = 150
 SMAX = 150
 TTY = '/dev/ttyUSB0'
 
@@ -18,7 +15,6 @@ TTY = '/dev/ttyUSB0'
 
 def main(args):
 
-  from numpy import array
   from modules.utils import get_tris_from_file as get
 
   fn = args.fn

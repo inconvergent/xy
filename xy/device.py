@@ -8,13 +8,15 @@ from time import sleep
 
 class Device(object):
 
-  def __init__(self, dev, penup, pendown):
+  def __init__(self, dev, penup, pendown, verbose=False):
 
     from serial import PARITY_NONE
     from serial import EIGHTBITS, STOPBITS_ONE
     from serial import STOPBITS_ONE
 
     self.serial = None
+
+    self.verbose = verbose
 
     self.__penup = penup
     self.__pendown = pendown
@@ -80,14 +82,18 @@ class Device(object):
     iw = self.serial.inWaiting()
     self.serial.xonxoff = True
 
+
     line = ' '.join(map(str, args))
-    print(' o {:d} i {:d} < {:s}'.format(ow, iw, line))
+    if self.verbose:
+      print(' o {:d} i {:d} < {:s}'.format(ow, iw, line))
 
     ow = self.serial.outWaiting()
     iw = self.serial.inWaiting()
     self.serial.write('%s\r\n' % line)
 
-    print(' o {:d} i {:d} > {:s}'.format(ow, iw, self.__read()))
+    r = self.__read()
+    if self.verbose:
+      print(' o {:d} i {:d} > {:s}'.format(ow, iw, r))
 
   def home(self):
     self.__write('G28')
