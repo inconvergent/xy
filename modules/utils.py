@@ -95,12 +95,16 @@ def get_tris_from_file(
     fn,
     smax,
     postfix='*.2obj',
-    spatial_sort = True
+    spatial_sort = True,
+    spatial_concat = False,
+    spatial_concat_eps = 1.0e-9
   ):
 
   from dddUtils.ioOBJ import load_2d as load
   from dddUtils.ddd import get_mid_2d as get_mid
   from dddUtils.ddd import get_distinct_edges_from_tris
+  from dddUtils.ddd import spatial_sort_2d as sort
+  from dddUtils.ddd import spatial_concat_2d as concat
 
   data = load(fn)
   vertices = data['vertices']
@@ -116,9 +120,8 @@ def get_tris_from_file(
   edges = get_distinct_edges_from_tris(data['faces'])
   paths = [row_stack(p) for p in vertices[edges,:]]
 
-  if spatial_sort:
-    from dddUtils.ddd import spatial_sort_2d as sort
-    return sort(paths)
-  else:
-    return paths
+  paths = sort(paths) if spatial_sort else paths
+  paths = concat(paths) if spatial_concat else paths
+
+  return paths
 

@@ -19,7 +19,7 @@ def main(args):
 
   fn = args.fn
 
-  paths = get(fn, SMAX)
+  paths = get(fn, SMAX, spatial_concat=True, spatial_concat_eps=1.e-13)
 
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
