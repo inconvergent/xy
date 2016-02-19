@@ -11,7 +11,7 @@ class Device(object):
   def __init__(self, dev, penup, pendown, verbose=False):
 
     from serial import PARITY_NONE
-    from serial import EIGHTBITS, STOPBITS_ONE
+    from serial import EIGHTBITS
     from serial import STOPBITS_ONE
 
     self.serial = None
@@ -35,6 +35,8 @@ class Device(object):
       # rtscts = False,
       # dsrdtr = False
     )
+
+    self._moves = 0
 
     sleep(3)
     self.cmd('START')
@@ -105,6 +107,7 @@ class Device(object):
     self.__write('G90')
 
   def move(self, x, y):
+    self._moves += 1
     self.__x = x
     self.__y = y
     self.__write(
@@ -133,6 +136,7 @@ class Device(object):
     self.pen(up)
 
   def pen(self, position):
+    self._moves += 1
     self.__write('M1', position)
     return
 
@@ -142,25 +146,40 @@ class Device(object):
   def pendown(self):
     self.pen(self.__pendown)
 
-  def do_paths(self, paths):
+  def __get_total_moves(self, paths):
+    num = len(paths)*3
+    for p in paths:
+      num += len(p)
+    return num
+
+  def do_paths(self, paths, info_leap=10):
 
     from time import time
 
     t0 = time()
 
     num = len(paths)
+    moves = self.__get_total_moves(paths)
 
-    print('total paths: {:d}'.format(num))
+    print('# paths: {:d}'.format(num))
+    print('# moves: {:d}'.format(moves))
     raw_input('enter to start ...')
+
+    self._moves = 0
+    flip = 0
 
     for i, p in enumerate(paths):
 
-      print('progress: {:d}/{:d} time: {:0.05f}'.format(i, num, time()-t0))
-
       self.move(*p[0,:])
       self.pendown()
+      flip += 1
       for xy in p[1:,:]:
         self.move(*xy)
+        if flip > info_leap:
+          print('progress: {:d}/{:d} ({:3.03f}) time: {:0.05f}'.format(self._moves, moves, self._moves/float(moves), time()-t0))
+          flip = 0
+        flip += 1
+
       self.penup()
 
     self.penup()
