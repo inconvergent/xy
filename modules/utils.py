@@ -65,11 +65,15 @@ def get_paths_from_file(
     fn,
     smax,
     postfix='*.2obj',
-    spatial_sort = True
+    spatial_sort = True,
+    spatial_concat = False,
+    spatial_concat_eps = 1.e-9
   ):
 
   from dddUtils.ioOBJ import load_2d as load
   from dddUtils.ddd import get_mid_2d as get_mid
+  from dddUtils.ddd import spatial_sort_2d as sort
+  from dddUtils.ddd import spatial_concat_2d as concat
 
   data = load(fn)
   vertices = data['vertices']
@@ -85,11 +89,10 @@ def get_paths_from_file(
 
   paths = [row_stack(vertices[l,:]) for l in lines]
 
-  if spatial_sort:
-    from dddUtils.ddd import spatial_sort_2d as sort
-    return sort(paths)
-  else:
-    return paths
+  paths = sort(paths) if spatial_sort else paths
+  paths = concat(paths) if spatial_concat else paths
+
+  return paths
 
 def get_tris_from_file(
     fn,

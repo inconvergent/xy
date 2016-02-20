@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 from xy.device import Device
-from time import sleep
 
 
 PENUP = 140
@@ -16,13 +15,10 @@ TTY = '/dev/ttyUSB0'
 
 def main(args):
 
-  from numpy import array
   from modules.utils import get_paths_from_file as get
 
   fn = args.fn
-
-  paths = get(fn, SMAX)
-
+  paths = get(fn, SMAX, spatial_concat = True)
   # from dddUtils.svg import export_svg
   # export_svg('fractures1.svg', paths, 1)
 
