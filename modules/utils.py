@@ -64,7 +64,6 @@ def get_paths_from_n_files(
 def get_paths_from_file(
     fn,
     smax,
-    postfix='*.2obj',
     spatial_sort = True,
     spatial_concat = False,
     spatial_concat_eps = 1.e-9
@@ -97,7 +96,6 @@ def get_paths_from_file(
 def get_tris_from_file(
     fn,
     smax,
-    postfix='*.2obj',
     spatial_sort = True,
     spatial_concat = False,
     spatial_concat_eps = 1.0e-9
@@ -131,7 +129,6 @@ def get_tris_from_file(
 def get_edges_from_file(
     fn,
     smax,
-    postfix='*.2obj',
     spatial_sort = True,
     spatial_concat = False,
     spatial_concat_eps = 1.0e-9
@@ -160,4 +157,31 @@ def get_edges_from_file(
   paths = concat(paths) if spatial_concat else paths
 
   return paths
+
+def get_dots_from_file(
+    fn,
+    smax,
+    spatial_sort = True,
+  ):
+
+  from dddUtils.ioOBJ import load_2d as load
+  from dddUtils.ddd import get_mid_2d as get_mid
+  from dddUtils.ddd import spatial_sort_dots_2d as sort
+
+  data = load(fn)
+  vertices = data['vertices']
+
+  vertices -= get_mid(vertices)
+  do_scale(vertices)
+  vertices += array([[0.5]*2])
+  vertices[:,:] *= smax
+
+  dots = vertices
+
+  print('scaled size:')
+  print_values(*get_bounding_box(vertices))
+
+  dots = sort(dots) if spatial_sort else dots
+
+  return dots
 

@@ -24,6 +24,8 @@ class Device(object):
     self.__x = 0.
     self.__y = 0.
 
+    self.pen_delay = 0.13
+
     self.serial = Serial(
       dev,
       115200,
@@ -125,15 +127,17 @@ class Device(object):
       'Y%s' % self.__y
     )
 
-  def draw(self, points, up, down):
-    if not points:
-      return
-    self.pen(up)
-    self.move(*points[0])
-    self.pen(down)
-    for point in points:
-      self.move(*point)
-    self.pen(up)
+  # def draw(self, points, up, down):
+    # if not points:
+      # return
+    # self.pen(up)
+    # self.move(*points[0])
+    # self.pen(down)
+    # sleep(self.pen_delay)
+    # for point in points:
+      # self.move(*point)
+    # sleep(self.pen_delay)
+    # self.pen(up)
 
   def pen(self, position):
     self._moves += 1
@@ -151,6 +155,36 @@ class Device(object):
     for p in paths:
       num += len(p)
     return num
+
+  def do_dots(self, dots, info_leap=10):
+
+    from time import time
+
+    t0 = time()
+
+    num = len(dots)
+
+    print('# dots: {:d}'.format(num))
+    raw_input('enter to start ...')
+
+    self._moves = 0
+    flip = 0
+
+    for i, p in enumerate(dots):
+
+      self.move(*p[0,:])
+      sleep(self.pen_delay)
+      self.pendown()
+      sleep(self.pen_delay)
+      flip += 1
+      if flip > info_leap:
+        print('progress: {:d}/{:d} ({:3.03f}) time: {:0.05f}'.format(i, num, i/float(num), time()-t0))
+        flip = 0
+      flip += 1
+
+    self.penup()
+
+    raw_input('enter to finish ... ')
 
   def do_paths(self, paths, info_leap=10):
 
@@ -171,7 +205,9 @@ class Device(object):
     for i, p in enumerate(paths):
 
       self.move(*p[0,:])
+      sleep(self.pen_delay)
       self.pendown()
+      sleep(self.pen_delay)
       flip += 1
       for xy in p[1:,:]:
         self.move(*xy)
@@ -180,7 +216,9 @@ class Device(object):
           flip = 0
         flip += 1
 
+      sleep(self.pen_delay)
       self.penup()
+      sleep(self.pen_delay)
 
     self.penup()
 
