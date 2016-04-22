@@ -171,7 +171,8 @@ def get_dots_from_file(
   data = load(fn)
   vertices = data['vertices']
 
-  vertices -= get_mid(vertices)
+  mid = get_mid(vertices)
+  vertices -= mid
   do_scale(vertices)
   vertices += array([[0.5]*2])
   vertices[:,:] *= smax

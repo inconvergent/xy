@@ -172,9 +172,11 @@ class Device(object):
 
     for i, p in enumerate(dots):
 
-      self.move(*p[0,:])
+      self.move(*p)
       sleep(self.pen_delay)
       self.pendown()
+      sleep(self.pen_delay)
+      self.penup()
       sleep(self.pen_delay)
       flip += 1
       if flip > info_leap:
