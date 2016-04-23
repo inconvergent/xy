@@ -1,5 +1,5 @@
 // from https://github.com/fogleman/xy/tree/master/firmware
-// this file is excepted from the MIT license of this repository
+// this file is excepted from whatever license is applied to this repository
 
 #include <EEPROM.h>
 #include <Servo.h>
