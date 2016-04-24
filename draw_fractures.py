@@ -6,8 +6,9 @@ from __future__ import print_function
 from xy.device import Device
 
 
-PENUP = 140
+PENUP = 130
 PENDOWN = 160
+
 SMAX = 150
 TTY = '/dev/ttyUSB0'
 

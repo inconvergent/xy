@@ -4,7 +4,6 @@
 from __future__ import print_function
 
 from xy.device import Device
-from time import sleep
 
 
 PENUP = 130
@@ -17,9 +16,6 @@ TTY = '/dev/ttyUSB0'
 
 
 def main():
-
-  from collections import Counter as counter
-
 
   with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
 
