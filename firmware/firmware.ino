@@ -60,8 +60,8 @@ void stepperMoveB(int dir)
 
 /************** calculate movements ******************/
 int stepAuxDelay=0;
-int stepdelay_min=1000;
-int stepdelay_max=1000;
+int stepdelay_min=900;
+int stepdelay_max=900;
 #define SPEED_STEP 1
 
 void doMove()
@@ -328,8 +328,8 @@ void initRobotSetup()
     roboSetup.data.height = HEIGHT;
     roboSetup.data.motorSwitch = 0;
     roboSetup.data.speed = 80;
-    roboSetup.data.penUpPos = 90;
-    roboSetup.data.penDownPos = 130;
+    roboSetup.data.penUpPos = 130;
+    roboSetup.data.penDownPos = 160;
     syncRobotSetup();
   }
   // init motor direction

@@ -7,8 +7,9 @@ from xy.device import Device
 from time import sleep
 
 
-PENUP = 140
+PENUP = 130
 PENDOWN = 160
+
 XMAX = 150
 YMAX = 150
 TTY = '/dev/ttyUSB0'

@@ -59,7 +59,6 @@ class Device(object):
         raise
 
   # def __read(self):
-
     # data = []
     # res = ''
     # w = self.serial.inWaiting()
@@ -118,29 +117,7 @@ class Device(object):
       'Y%s' % y
     )
 
-  def rel_move(self, x, y):
-    self.__x += x
-    self.__y += y
-    self.__write(
-      'G1',
-      'X%s' % self.__x,
-      'Y%s' % self.__y
-    )
-
-  # def draw(self, points, up, down):
-    # if not points:
-      # return
-    # self.pen(up)
-    # self.move(*points[0])
-    # self.pen(down)
-    # sleep(self.pen_delay)
-    # for point in points:
-      # self.move(*point)
-    # sleep(self.pen_delay)
-    # self.pen(up)
-
   def pen(self, position):
-    self._moves += 1
     self.__write('M1', position)
     return
 
@@ -151,9 +128,9 @@ class Device(object):
     self.pen(self.__pendown)
 
   def __get_total_moves(self, paths):
-    num = len(paths)*3
+    num = len(paths)-1
     for p in paths:
-      num += len(p)
+      num += len(p)-1
     return num
 
   def do_dots(self, dots, info_leap=10):
@@ -180,7 +157,11 @@ class Device(object):
       sleep(self.pen_delay)
       flip += 1
       if flip > info_leap:
-        print('progress: {:d}/{:d} ({:3.03f}) time: {:0.05f}'.format(i, num, i/float(num), time()-t0))
+        per = i/float(num)
+        tot = (time()-t0)/3600.
+        rem = tot/per - tot
+        s = 'progress: {:d}/{:d} ({:3.03f}) run time: {:0.05f} hrs, remaining: {:0.05f} hrs'
+        print(s.format(i, num, per, tot, rem))
         flip = 0
       flip += 1
 
@@ -214,7 +195,11 @@ class Device(object):
       for xy in p[1:,:]:
         self.move(*xy)
         if flip > info_leap:
-          print('progress: {:d}/{:d} ({:3.03f}) time: {:0.05f}'.format(self._moves, moves, self._moves/float(moves), time()-t0))
+          per = self._moves/float(moves)
+          tot = (time()-t0)/3600.
+          rem = tot/per - tot
+          s = 'progress: {:d}/{:d} ({:3.03f}) run time: {:0.05f} hrs, remaining: {:0.05f} hrs'
+          print(s.format(self._moves, moves, per, tot, rem))
           flip = 0
         flip += 1
 
