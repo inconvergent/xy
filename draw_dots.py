@@ -22,7 +22,14 @@ def main(args):
 
   dots = get(fn, SMAX)
 
-  with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
+  with Device(
+    TTY,
+    penup=PENUP,
+    pendown=PENDOWN,
+    verbose=False,
+    min_delay=1000,
+    max_delay=1000
+  ) as device:
 
     device.do_dots(dots)
 

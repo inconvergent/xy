@@ -22,7 +22,14 @@ def main(args):
 
   paths = get(fn, SMAX, spatial_concat=True, spatial_concat_eps=1.e-13)
 
-  with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
+  with Device(
+    TTY,
+    penup=PENUP,
+    pendown=PENDOWN,
+    verbose=False,
+    min_delay=1000,
+    max_delay=1000
+  ) as device:
 
     device.do_paths(paths)
 

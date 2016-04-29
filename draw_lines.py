@@ -29,7 +29,14 @@ def main(args):
 
   paths = get(pattern, SMAX, skip, steps, stride, scale, scale_to_fit)
 
-  with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
+  with Device(
+    TTY,
+    penup=PENUP,
+    pendown=PENDOWN,
+    verbose=False,
+    min_delay=2000,
+    max_delay=2000
+  ) as device:
 
     device.do_paths(paths)
 

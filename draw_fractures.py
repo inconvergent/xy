@@ -24,7 +24,14 @@ def main(args):
   # export_svg('fractures1.svg', paths, 1)
 
 
-  with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
+  with Device(
+    TTY,
+    penup=PENUP,
+    pendown=PENDOWN,
+    verbose=False,
+    min_delay=2000,
+    max_delay=2000
+  ) as device:
 
     device.do_paths(paths)
 

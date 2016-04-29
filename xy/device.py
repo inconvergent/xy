@@ -8,7 +8,16 @@ from time import sleep
 
 class Device(object):
 
-  def __init__(self, dev, penup, pendown, verbose=False):
+  def __init__(
+    self,
+    dev,
+    penup,
+    pendown,
+    min_delay=400,
+    max_delay=1200,
+    pen_delay=0.13,
+    verbose=False
+  ):
 
     from serial import PARITY_NONE
     from serial import EIGHTBITS
@@ -17,6 +26,9 @@ class Device(object):
     self.serial = None
 
     self.verbose = verbose
+
+    self.__min_delay = min_delay
+    self.__max_delay = max_delay
 
     self.__penup = penup
     self.__pendown = pendown
@@ -43,13 +55,19 @@ class Device(object):
     sleep(3)
     self.cmd('START')
 
-    self.set_absolute()
     self.penup()
 
   def __enter__(self):
+
+    raw_input('enter to start ...')
+
     return self
 
   def __exit__(self,*arg, **args):
+
+    self.penup()
+    raw_input('\n\ndone ...')
+
     if self.serial:
       try:
         self.cmd('STOP')
@@ -98,23 +116,16 @@ class Device(object):
     if self.verbose:
       print(' o {:d} i {:d} > {:s}'.format(ow, iw, r))
 
-  def home(self):
-    self.__write('G28')
-
-  def set_relative(self):
-    self.__write('G91')
-
-  def set_absolute(self):
-    self.__write('G90')
-
-  def move(self, x, y):
+  def move(self, x, y, fast=False):
     self._moves += 1
     self.__x = x
     self.__y = y
     self.__write(
       'G1',
       'X%s' % x,
-      'Y%s' % y
+      'Y%s' % y,
+      'L%s' % (self.__min_delay if fast else self.__max_delay),
+      'U%s' % self.__max_delay
     )
 
   def pen(self, position):
@@ -142,7 +153,6 @@ class Device(object):
     num = len(dots)
 
     print('# dots: {:d}'.format(num))
-    raw_input('enter to start ...')
 
     self._moves = 0
     flip = 0
@@ -167,8 +177,6 @@ class Device(object):
 
     self.penup()
 
-    raw_input('enter to finish ... ')
-
   def do_paths(self, paths, info_leap=10):
 
     from time import time
@@ -180,7 +188,6 @@ class Device(object):
 
     print('# paths: {:d}'.format(num))
     print('# moves: {:d}'.format(moves))
-    raw_input('enter to start ...')
 
     self._moves = 0
     flip = 0
@@ -208,6 +215,4 @@ class Device(object):
       sleep(self.pen_delay)
 
     self.penup()
-
-    raw_input('enter to finish ... ')
 

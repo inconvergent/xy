@@ -6,6 +6,9 @@ from __future__ import print_function
 from xy.device import Device
 from time import sleep
 
+from numpy.random import random
+from numpy import floor
+
 
 PENUP = 140
 PENDOWN = 160
@@ -17,18 +20,29 @@ TTY = '/dev/ttyUSB0'
 
 def main():
 
-  with Device(TTY, penup=PENUP, pendown=PENDOWN) as device:
+  with Device(
+    TTY,
+    penup=PENUP,
+    pendown=PENDOWN,
+    verbose=True,
+    min_delay=200,
+    max_delay=1200
+  ) as device:
 
     device.penup()
-    raw_input('enter to start ...')
+    device.move(floor(random()*XMAX),floor(random()*YMAX), fast=True)
 
-    # device.home()
-    device.move(XMAX,YMAX)
-    device.move(0,0)
-
+    device.pendown()
+    device.move(floor(random()*XMAX),floor(random()*YMAX), fast=False)
     device.penup()
 
-    raw_input('\n\ndone ...')
+    device.move(floor(random()*XMAX),floor(random()*YMAX), fast=True)
+
+    device.pendown()
+    device.move(floor(random()*XMAX),floor(random()*YMAX), fast=False)
+    device.penup()
+
+    device.move(0,0,fast=True)
 
 
 if __name__ == '__main__':
