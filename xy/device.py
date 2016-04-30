@@ -36,7 +36,7 @@ class Device(object):
     self.__x = 0.
     self.__y = 0.
 
-    self.pen_delay = 0.13
+    self.pen_delay = pen_delay
 
     self.serial = Serial(
       dev,
@@ -129,7 +129,9 @@ class Device(object):
     )
 
   def pen(self, position):
+    sleep(self.pen_delay)
     self.__write('M1', position)
+    sleep(self.pen_delay)
     return
 
   def penup(self):
@@ -160,11 +162,8 @@ class Device(object):
     for i, p in enumerate(dots):
 
       self.move(*p)
-      sleep(self.pen_delay)
       self.pendown()
-      sleep(self.pen_delay)
       self.penup()
-      sleep(self.pen_delay)
       flip += 1
       if flip > info_leap:
         per = i/float(num)
@@ -194,10 +193,8 @@ class Device(object):
 
     for i, p in enumerate(paths):
 
-      self.move(*p[0,:])
-      sleep(self.pen_delay)
+      self.move(*p[0,:], fast=True)
       self.pendown()
-      sleep(self.pen_delay)
       flip += 1
       for xy in p[1:,:]:
         self.move(*xy)
@@ -210,9 +207,7 @@ class Device(object):
           flip = 0
         flip += 1
 
-      sleep(self.pen_delay)
       self.penup()
-      sleep(self.pen_delay)
 
     self.penup()
 

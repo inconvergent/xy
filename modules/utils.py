@@ -89,7 +89,7 @@ def get_paths_from_file(
   paths = [row_stack(vertices[l,:]) for l in lines]
 
   paths = sort(paths) if spatial_sort else paths
-  paths = concat(paths) if spatial_concat else paths
+  paths = concat(paths, spatial_concat_eps) if spatial_concat else paths
 
   return paths
 
@@ -122,7 +122,7 @@ def get_tris_from_file(
   paths = [row_stack(p) for p in vertices[edges,:]]
 
   paths = sort(paths) if spatial_sort else paths
-  paths = concat(paths) if spatial_concat else paths
+  paths = concat(paths, spatial_concat_eps) if spatial_concat else paths
 
   return paths
 
@@ -154,7 +154,7 @@ def get_edges_from_file(
   paths = [row_stack(p) for p in vertices[edges,:]]
 
   paths = sort(paths) if spatial_sort else paths
-  paths = concat(paths) if spatial_concat else paths
+  paths = concat(paths, spatial_concat_eps) if spatial_concat else paths
 
   return paths
 

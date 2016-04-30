@@ -19,18 +19,16 @@ def main(args):
   from modules.utils import get_paths_from_file as get
 
   fn = args.fn
-  paths = get(fn, SMAX, spatial_concat = True)
-  # from dddUtils.svg import export_svg
-  # export_svg('fractures1.svg', paths, 1)
-
+  paths = get(fn, SMAX, spatial_concat = True, spatial_concat_eps=1e-4)
 
   with Device(
     TTY,
     penup=PENUP,
     pendown=PENDOWN,
     verbose=False,
-    min_delay=2000,
-    max_delay=2000
+    min_delay=200,
+    max_delay=2100,
+    pen_delay=0.1
   ) as device:
 
     device.do_paths(paths)
