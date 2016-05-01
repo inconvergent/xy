@@ -16,26 +16,19 @@ TTY = '/dev/ttyUSB0'
 
 def main(args):
 
-  from modules.utils import get_paths_from_n_files as get
+  from modules.utils import get_paths_from_file as get
 
-  pattern = args.pattern
-  scale = args.scale
-  scale_to_fit = args.scaleToFit
-  steps = args.steps
-  stride = args.stride
-  skip = args.skip
-
-  print(args)
-
-  paths = get(pattern, SMAX, skip, steps, stride, scale, scale_to_fit)
+  fn = args.fn
+  paths = get(fn, SMAX, spatial_concat = True, spatial_concat_eps=1e-4)
 
   with Device(
     TTY,
     penup=PENUP,
     pendown=PENDOWN,
     verbose=False,
-    min_delay=2000,
-    max_delay=2000
+    min_delay=200,
+    max_delay=2100,
+    pen_delay=0.1
   ) as device:
 
     device.do_paths(paths)
@@ -47,42 +40,10 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '--prefix',
+    '--fn',
     type=str,
     required=True
   )
-  parser.add_argument(
-    '--steps',
-    type=int,
-    default=100000
-  )
-  parser.add_argument(
-    '--stride',
-    type=int,
-    default=1
-  )
-  parser.add_argument(
-    '--skip',
-    type=int,
-    default=0
-  )
-  parser.add_argument(
-    '--scale',
-    type=float,
-    default=1.0
-  )
-
-  parser.add_argument(
-    '--scaleToFit',
-    dest='scaleToFit',
-    action='store_true'
-  )
-  parser.add_argument(
-    '--no-scaleToFit',
-    dest='scaleToFit',
-    action='store_false'
-  )
-  parser.set_defaults(scaleToFit=False)
 
   args = parser.parse_args()
   main(args)
