@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '--pattern',
+    '--prefix',
     type=str,
     required=True
   )

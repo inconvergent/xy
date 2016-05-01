@@ -27,8 +27,8 @@ def main(args):
     penup=PENUP,
     pendown=PENDOWN,
     verbose=False,
-    min_delay=1000,
-    max_delay=1000
+    min_delay=350,
+    max_delay=350
   ) as device:
 
     device.do_dots(dots)
